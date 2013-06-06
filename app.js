@@ -20,7 +20,6 @@ app.configure(function(){
   });
   app.set('view engine', 'jade');
   app.set('view cache', false);
-  app.set('view options', { pretty: true });
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -35,7 +34,8 @@ app.configure('development', function(){
 });
 
 
-app.get('/', taskList.showTasks.bind(taskList));
+//app.get('/', taskList.showTasks.bind(taskList));
+app.get('/', taskList.markdown.bind(taskList));
 app.post('/addtask', taskList.addTask.bind(taskList));
 app.post('/completetask', taskList.completeTask.bind(taskList));
 

@@ -6,6 +6,9 @@ html
     title= title
     each style in styles
       link(rel='stylesheet', href=style.href)
+    script(type='text/javascript', src='/scripts/markdown.js')
+    script(type='text/javascript', src='/scripts/angular.min.js')
+    script(type='text/javascript', src='/scripts/script.js')
   body
     #page
       block content

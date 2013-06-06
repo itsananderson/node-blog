@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  
+  div(ng-app='app')
+    div(ng-controller='MdCtrl')
+      textarea(type='text', ng-model="message", rows='30', cols='40', style='float:left')
+      div(class='markdown-preview', ng-bind-html-unsafe="message | markdown")
+    div(style='clear:both')

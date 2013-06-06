@@ -4,7 +4,9 @@ var mongoose = require('mongoose'),
 module.exports = TaskList;
 
 function TaskList(connection) {
-    mongoose.connect(connection);
+	if (typeof connection != 'undefined') {
+		mongoose.connect(connection);
+	}
 }
 
 
@@ -42,4 +44,8 @@ TaskList.prototype.completeTask = function(req,res) {
     }
   }
   res.redirect('/');
+};
+
+TaskList.prototype.markdown = function(req,res) {
+	res.render('markdown', {title: 'Markdown Angular Test'});
 };
