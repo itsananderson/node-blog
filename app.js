@@ -3,7 +3,7 @@ var express = require('express')
     , user = require('./routes/user')
     , http = require('http')
     , path = require('path')
-	, jade = require('jade');
+    , jade = require('jade');
 var TaskList = require('./routes/tasklist');
 var taskList = new TaskList(process.env.CUSTOMCONNSTR_MONGOLAB_URI);
 
