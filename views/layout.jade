@@ -1,7 +1,13 @@
+styles = styles || [{href:'/stylesheets/test.css'}]
+
 doctype 5
 html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    each style in styles
+      link(rel='stylesheet', href=style.href)
   body
-    block content
+    #page
+      block content
+

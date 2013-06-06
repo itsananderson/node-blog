@@ -2,7 +2,8 @@ var express = require('express')
     , routes = require('./routes')
     , user = require('./routes/user')
     , http = require('http')
-    , path = require('path');
+    , path = require('path')
+	, jade = require('jade');
 var TaskList = require('./routes/tasklist');
 var taskList = new TaskList(process.env.CUSTOMCONNSTR_MONGOLAB_URI);
 
@@ -13,7 +14,13 @@ var app = express();
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
+  app.engine('jade', function(path, options, fn){
+    options.pretty = typeof options.pretty == 'undefined' ? true : options.pretty;
+    return jade.__express(path, options, fn)
+  });
   app.set('view engine', 'jade');
+  app.set('view cache', false);
+  app.set('view options', { pretty: true });
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
