@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  - json = "var Post = " + JSON.stringify(post)
+  script
+    !{json}
+  div(ng-app='app').container
+    header.page-header
+      h1= title
+    div(ng-controller='PostCtrl').post
+      div.row
+        div.span12
+          h2= post.postName
+        div.span12.post-content(ng-bind-html-unsafe="post.postDraft | markdown")

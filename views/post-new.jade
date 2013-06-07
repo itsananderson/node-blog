@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  div(ng-app='app').container
+    header.page-header
+      h1= title
+    div(ng-controller='PostNewCtrl')
+      div.row
+        div.span12
+          input(type='text', ng-model='post.postTitle')
+          = ' '
+          span
+            {{post.postSlug}}
+        div.span12
+          button.btn.btn-primary(ng-click='createPost()')= "Create Post"

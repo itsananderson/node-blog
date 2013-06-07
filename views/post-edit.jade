@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  - json = "var Post = " + JSON.stringify(post)
+  script
+    !{json}
+  div(ng-app='app').container
+    header.page-header
+      h1= title
+    div.row(ng-controller='PostEditCtrl')
+       div.span12
+          textarea(type='text', ng-model="post.postDraft", rows='30', cols='40', style='width: 90%')
+       div(style='clear:both')

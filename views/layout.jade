@@ -1,4 +1,3 @@
-styles = styles || [{href:'/stylesheets/style.css'}]
 
 doctype 5
 html
@@ -6,9 +5,8 @@ html
     title= title
     each style in styles
       link(rel='stylesheet', href=style.href)
-    script(type='text/javascript', src='/scripts/markdown.js')
-    script(type='text/javascript', src='/scripts/angular.min.js')
-    script(type='text/javascript', src='/scripts/script.js')
+    each script in scripts
+      script(type='text/javascript', src=script.src)
   body
     #page
       block content

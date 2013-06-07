@@ -8,6 +8,12 @@ a {
 	color: #00B7FF;
 }
 
+.container {
+	background-color: white;
+	padding: 20px;
+}
+
+/*
 #page {
 	background-color: white;
 	width: 800px;
@@ -20,3 +26,4 @@ a {
 	float:left;
 	padding: 0 10px;
 }
+*/

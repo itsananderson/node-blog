@@ -1,14 +1,8 @@
-var mongoose = require('mongoose'),
-    task = require('../models/task.js');
+var task = require('../models/task.js');
 
 module.exports = TaskList;
 
-function TaskList(connection) {
-	if (typeof connection != 'undefined') {
-		mongoose.connect(connection);
-	}
-}
-
+function TaskList() {}
 
 TaskList.prototype.showTasks = function(req, res) {
   task.find({itemCompleted: false}, function foundTasks(err, items) {

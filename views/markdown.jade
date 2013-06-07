@@ -1,8 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  div(ng-app='app')
-    textarea(type='text', ng-model="message", rows='30', cols='40', style='float:left')
-    div(class='markdown-preview', ng-bind-html-unsafe="message | markdown")
-  div(style='clear:both')
+  div(ng-app='app').container
+    header.page-header
+      h1= title
+    div.row
+      div.span6
+        textarea(type='text', ng-model="message", rows='30', cols='40', style='float:left;width: 100%')
+      div.span6
+        div(class='markdown-preview', ng-bind-html-unsafe="message | markdown")
+      div(style='clear:both')
