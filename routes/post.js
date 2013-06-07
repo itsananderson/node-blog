@@ -5,7 +5,7 @@ module.exports = PostList;
 function PostList() {}
 
 PostList.prototype.showPosts = function(req, res) {
-	post.find({}, function foundPosts(err, items) {
+	post.find({}).sort('postDate').exec(function foundPosts(err, items) {
 		res.render('post-list',{title: 'My Blog', posts: items})
 	});
 };

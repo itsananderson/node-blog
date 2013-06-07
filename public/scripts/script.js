@@ -44,9 +44,9 @@ var app = angular.module('app', [])
 	})
 
 	.controller('PostNewCtrl', function($scope, PostFactory) {
-		$scope.post = {postTitle:''};
+		$scope.post = {postName:''};
 
-		$scope.$watch('post.postTitle', function(newVal){
+		$scope.$watch('post.postName', function(newVal){
 			var filter = function(val) {
 				return val.replace(' ', '-').replace('--', '-');
 			};

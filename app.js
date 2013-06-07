@@ -56,6 +56,7 @@ app.get('/', taskList.markdown.bind(taskList));
 app.get('/markdown', taskList.markdown.bind(taskList));
 app.post('/addtask', taskList.addTask.bind(taskList));
 app.post('/completetask', taskList.completeTask.bind(taskList));
+app.get('/posts', postList.showPosts.bind(postList));
 app.get('/post-new', postList.newPost.bind(postList));
 app.post('/post-create', postList.addPost.bind(postList));
 app.get('/post-content/:slug', postList.getPostContent.bind(postList));

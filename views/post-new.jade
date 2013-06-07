@@ -7,9 +7,11 @@ block content
     div(ng-controller='PostNewCtrl')
       div.row
         div.span12
-          input(type='text', ng-model='post.postTitle')
-          = ' '
-          span
-            {{post.postSlug}}
+          label(for='postname')
+            Post Name
+        div.span12
+          input(type='text', ng-model='post.postName')#postname
+        div.span12
+          p Slug: {{post.postSlug}}
         div.span12
           button.btn.btn-primary(ng-click='createPost()')= "Create Post"
