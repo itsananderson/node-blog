@@ -30,7 +30,7 @@ Deploying to Azure
 
 * Create an Azure website
 * Create a MongoDB service from the store
-* Paste your MongoDB connection string into a new configuration option under "configuration" -> "connection strings" with the key `MONGOLAB_URI`
+* Paste your MongoDB connection string into a new configuration option under "configuration" &rarr; "connection strings" with the key `MONGOLAB_URI`
 * Enable Git deployments to for the website, taking note of the Git repository url
 * Clone this repository to your local machine
 * Add the Azure remote by running `git remote add azure <your-repo>` where `<your-repo>` is the Git deployment repository for your Azure site
