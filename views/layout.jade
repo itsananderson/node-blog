@@ -2,11 +2,17 @@ doctype 5
 html
   head
     title= title
-    each style in styles
-      link(rel='stylesheet', href=style.href)
-    each script in scripts
-      script(type='text/javascript', src=script.src)
+    block styles
+      each style in styles
+        link(rel='stylesheet', href=style.href)
+    block head-scripts
+      each script in scripts
+        script(type='text/javascript', src=script.src)
   body
-    #page
+    div.container(ng-app="app")
+      header.page-header
+        block head
+          include includes/head
       block content
-
+      block footer
+        include includes/foot

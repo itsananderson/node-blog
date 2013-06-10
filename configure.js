@@ -21,6 +21,9 @@ module.exports = function(app) {
 				{src: '/lib/js/markdown.js'},
 				{src: '/js/script.js'}
 			];
+
+			options.footerScripts = [];
+
 			options.loggedIn = true;
 			return jade.__express(path, options, fn)
 		});

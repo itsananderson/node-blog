@@ -1,15 +1,12 @@
 extends ../layout
 
+append head
+  = posts.length + ' posts '
+  a(href='/posts/new') Add New
+
 block content
-  div(ng-app='app').container
-    header.page-header
-      h1
-        a(href='/posts') #{title}
-        = ' - ' + posts.length + ' posts'
-      a(href='/posts/new') Add New
-    div.post
-      div.row
-        each post in posts
-          div.span12
-            a(href='/posts/' + post.postSlug)
-              h2= post.postName
+  div.post
+    div.row
+      each post in posts
+        div.span12
+          h2: a(href='/posts/' + post.postSlug)= post.postName

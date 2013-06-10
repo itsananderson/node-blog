@@ -13,7 +13,6 @@ PostList.prototype.showPosts = function(req, res) {
 };
 
 PostList.prototype.viewPost = function(req, res) {
-	console.log(req.url);
 	post.find({postSlug: req.params.slug}, function(err, posts){
 		if ( posts.length ) {
 			res.render('post/single', {title: 'My Blog', post: posts[0]});

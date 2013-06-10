@@ -1,19 +1,15 @@
 extends ../layout
 
 block content
-  div(ng-app='app').container
-    header.page-header
-      a(href='/posts')
-        h1= title
-    div(ng-controller='PostNewCtrl')
-      div.row
-        div.span12
-          label(for='postname')
-            Post Name
-        div.span12
-          input(type='text', ng-model='post.postName')#postname
-        div.span12
-          p Slug:
-            input(type='text', ng-model="post.postSlug", ng-change="changeSlug()")
-        div.span12
-          button.btn.btn-primary(ng-click='createPost()')= "Create Post"
+  div(ng-controller='PostNewCtrl')
+    div.row
+      div.span12
+        label(for='postname')
+          Post Name
+      div.span12
+        input(type='text', ng-model='post.postName')#postname
+      div.span12
+        p Slug:
+          input(type='text', ng-model="post.postSlug", ng-change="changeSlug()")
+      div.span12
+        button.btn.btn-primary(ng-click='createPost()')= "Create Post"
