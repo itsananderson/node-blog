@@ -6,8 +6,15 @@ block content
     !{json}
   div(ng-app='app').container
     header.page-header
-      h1= title
-    div.row(ng-controller='PostEditCtrl')
-       div.span12
+      a(href='/posts'): h1= title
+    div(ng-controller='PostEditCtrl')
+      div.row: div.span12.status
+        span(ng-show="postDirty") Post Dirty
+        span(ng-show="draftSaving") Saving Draft
+      div.row: div.span12
+        label(for='post-title') Title
+        input(type='text', ng-model='post.postName')
+      div.row
+        div.span12
           textarea(type='text', ng-model="post.postDraft", rows='30', cols='40', style='width: 90%')
-       div(style='clear:both')
+        div(style='clear:both')

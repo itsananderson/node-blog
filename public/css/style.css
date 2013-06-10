@@ -13,6 +13,10 @@ a {
 	padding: 20px;
 }
 
+.status {
+	height: 20px;
+}
+
 /*
 #page {
 	background-color: white;

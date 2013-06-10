@@ -1,4 +1,6 @@
 var post = require('../models/post.js');
+    EventEmitter = require('events').EventEmitter,
+    events = new EventEmitter();
 
 module.exports = PostList;
 
@@ -11,30 +13,40 @@ PostList.prototype.showPosts = function(req, res) {
 };
 
 PostList.prototype.viewPost = function(req, res) {
+	console.log(req.url);
 	post.find({postSlug: req.params.slug}, function(err, posts){
 		if ( posts.length ) {
-			console.log(posts[0]);
 			res.render('post', {title: 'My Blog', post: posts[0]});
 		} else {
-			console.log('not found');
-			res.send('not found');
+			res.status(404).header('Content-Type', 'text/plain').send('Cannot GET ' + req.url);
 		}
 	});
 };
 
-PostList.prototype.getPostContent = function(req, res) {
-	var slug = req.params.slug;
-	post.findOne({postSlug: slug}, function(err, post){
-		res.json(post);
-	});
+PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
+	var id = req.params.id,
+		sent = false;
+
+	var updateHandler = function(post){
+		sent = true;
+		res.json({post:post});
+	};
+
+	events.once('updated-post-' + id, updateHandler);
+
+	setTimeout( function() {
+		if ( !sent ) {
+			events.removeListener( 'updated-post-' + id, updateHandler );
+			res.json({timeout: 'Timed out without an update'});
+		}
+	}, 25000);
 };
 
 PostList.prototype.newPost = function(req, res) {
-	console.log('here i am');
 	res.render('post-new', {title: 'My Blog'});
 };
 
-PostList.prototype.addPost = function(req,res) {
+PostList.prototype.addPost = function addPost(req,res) {
 	var item = req.body.post;
 	delete item._id;
 	new post(item).save(function savedPost(err){
@@ -51,14 +63,16 @@ PostList.prototype.editPost = function(req,res) {
 	});
 };
 
-PostList.prototype.savePost = function(req, res) {
+PostList.prototype.savePost = function savePost(req, res) {
 	var slug = req.params.slug;
 	var updatedPost = req.body.post;
 	delete updatedPost._id;
-
-	console.log(slug)
+	updatedPost.postUpdated = new Date();
 	post.update({postSlug: slug}, {$set: updatedPost}, function(err){
-		console.log(err);
+		if (null !== err) {
+			console.log('error', err);
+		}
 	});
+	events.emit( 'updated-post-' + req.body.post._id, updatedPost );
 	res.end();
 };

@@ -3,8 +3,10 @@ extends layout
 block content
   div(ng-app='app').container
     header.page-header
-      h1 #{title} - #{posts.length} posts
-      a(href='/post-new') Add New
+      h1
+        a(href='/posts') #{title}
+        = ' - ' + posts.length + ' posts'
+      a(href='/posts/new') Add New
     div.post
       div.row
         each post in posts
