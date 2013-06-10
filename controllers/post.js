@@ -8,7 +8,7 @@ function PostList() {}
 
 PostList.prototype.showPosts = function(req, res) {
 	post.find({}).sort('postDate').exec(function foundPosts(err, items) {
-		res.render('post-list',{title: 'My Blog', posts: items})
+		res.render('post/index',{title: 'My Blog', posts: items})
 	});
 };
 
@@ -16,7 +16,7 @@ PostList.prototype.viewPost = function(req, res) {
 	console.log(req.url);
 	post.find({postSlug: req.params.slug}, function(err, posts){
 		if ( posts.length ) {
-			res.render('post', {title: 'My Blog', post: posts[0]});
+			res.render('post/single', {title: 'My Blog', post: posts[0]});
 		} else {
 			res.status(404).header('Content-Type', 'text/plain').send('Cannot GET ' + req.url);
 		}
@@ -43,7 +43,7 @@ PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
 };
 
 PostList.prototype.newPost = function(req, res) {
-	res.render('post-new', {title: 'My Blog'});
+	res.render('post/new', {title: 'My Blog'});
 };
 
 PostList.prototype.addPost = function addPost(req,res) {
@@ -59,7 +59,7 @@ PostList.prototype.addPost = function addPost(req,res) {
 
 PostList.prototype.editPost = function(req,res) {
 	post.findOne({postSlug: req.params.slug}, function(err, post){
-		res.render('post-edit', {title: 'My Blog', post: post});
+		res.render('post/edit', {title: 'My Blog', post: post});
 	});
 };
 
