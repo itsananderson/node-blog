@@ -34,7 +34,7 @@ var app = angular.module('app', [])
 				if ( res.post ) {
 					$scope.post = res.post;
 				}
-				cb.apply(arguments);
+				setTimeout(cb.bind(undefined, arguments), 100);
 			}).error(function(){
 				setTimeout(cb.bind(undefined, arguments), 1000);
 			});

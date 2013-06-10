@@ -28,6 +28,7 @@ PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
 
 	var updateHandler = function(post){
 		sent = true;
+		res.header('Expires', '-1');
 		res.json({post:post});
 	};
 
@@ -36,6 +37,7 @@ PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
 	setTimeout( function() {
 		if ( !sent ) {
 			events.removeListener( 'updated-post-' + id, updateHandler );
+			res.header('Expires', '-1');
 			res.json({timeout: 'Timed out without an update'});
 		}
 	}, 25000);
