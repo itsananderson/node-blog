@@ -9,6 +9,13 @@ Objectives
 * To learn more about Node.js, Express, Angular, and MongoDB
 * Be able to use a simple UI to publish online
 
+Authentication Warning
+----------------------
+
+As currently implemented, this app doesn't require authentication to edit posts.
+This means anybody who finds your site can edit your content
+You've been warned!
+
 Installation
 ------------
 

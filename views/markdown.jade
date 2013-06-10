@@ -5,8 +5,15 @@ block content
     header.page-header
       h1= title
     div.row
-      div.span6
-        textarea(type='text', ng-model="message", rows='30', cols='40', style='float:left;width: 100%')
-      div.span6
+      div.span12
+        p
+          div.btn-group(style="text-align: center;", data-toggle="buttons-radio", ng-init="textboxClass='span6';previewClass='span6'") foo
+            button.btn.btn-mini(ng-click="textboxClass='span12';previewClass='hide'"): i.icon-pencil
+            button.btn.btn-mini(ng-click="textboxClass='span6';previewClass='span6'"): i.icon-pause
+            button.btn.btn-mini(ng-click="textboxClass='hide';previewClass='span12'"): i.icon-play
+    div.row
+      div(ng-class="textboxClass")
+        textarea(type='text', ng-model="message", rows='30', cols='40', style='width: 100%')
+      div(ng-class="previewClass")
         div(class='markdown-preview', ng-bind-html-unsafe="message | markdown")
       div(style='clear:both')
