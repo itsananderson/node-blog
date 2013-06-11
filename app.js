@@ -7,7 +7,7 @@ var express = require('express'),
 	configure = require('./configure');
 
 var connectionString = process.env.CUSTOMCONNSTR_MONGOLAB_URI || 'mongodb://localhost:27017';
-require('mongoose').connect(connectionString);
+require('mongoose').connect(connectionString, {server: {socketOptions: { keepAlive: 1 } } });
 
 configure(app);
 route(app);
