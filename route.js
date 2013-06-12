@@ -1,8 +1,9 @@
-module.exports = function(app) {
-	var MarkdownTest = require('./controllers/markdownTest'),
-		PostList = require('./controllers/post'),
-		markdownTest = new MarkdownTest(),
-		postList = new PostList();
+var MarkdownTest = require('./controllers/markdownTest'),
+	PostList = require('./controllers/post');
+
+module.exports = function(app, io, events) {
+	var markdownTest = new MarkdownTest(app, io, events),
+		postList = new PostList(app, io, events);
 
 	app.get('/', markdownTest.markdown.bind(markdownTest));
 	app.get('/markdown', markdownTest.markdown.bind(markdownTest));
@@ -13,5 +14,4 @@ module.exports = function(app) {
 
 	app.post('/api/posts', postList.addPost.bind(postList));
 	app.post('/api/posts/:slug', postList.savePost.bind(postList));
-	app.get('/api/posts/:slug/subscribe', postList.subscribeToChange.bind(postList));
 };

@@ -1,10 +1,12 @@
 var post = require('../models/post.js');
-    EventEmitter = require('events').EventEmitter,
-    events = new EventEmitter();
 
 module.exports = PostList;
 
-function PostList() {}
+function PostList(app, io, events) {
+	this.app = app;
+	this.io = io;
+	this.events = events;
+}
 
 PostList.prototype.showPosts = function(req, res) {
 	post.find({}).sort('postDate').exec(function foundPosts(err, items) {
@@ -22,6 +24,7 @@ PostList.prototype.viewPost = function(req, res) {
 	});
 };
 
+/*
 PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
 	var id = req.params.id,
 		sent = false;
@@ -42,6 +45,7 @@ PostList.prototype.subscribeToChange = function subscribeToChange(req, res) {
 		}
 	}, 25000);
 };
+*/
 
 PostList.prototype.newPost = function(req, res) {
 	res.render('post/new', {title: 'My Blog'});
@@ -65,15 +69,4 @@ PostList.prototype.editPost = function(req,res) {
 };
 
 PostList.prototype.savePost = function savePost(req, res) {
-	var slug = req.params.slug;
-	var updatedPost = req.body.post;
-	delete updatedPost._id;
-	updatedPost.postUpdated = new Date();
-	post.update({postSlug: slug}, {$set: updatedPost}, function(err){
-		if (null !== err) {
-			console.log('error', err);
-		}
-	});
-	events.emit( 'updated-post-' + req.body.post._id, updatedPost );
-	res.end();
 };

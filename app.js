@@ -1,17 +1,17 @@
 var express = require('express'),
 	app = express(),
-	http = require('http'),
+	server = require('http').createServer(app),
 	emitter = require('events').EventEmitter,
 	events = new emitter(),
 	route = require('./route'),
-	configure = require('./configure');
+	configure = require('./configure'),
+	socket = require('./socket'),
+	io = require('socket.io').listen(server);
 
-var connectionString = process.env.CUSTOMCONNSTR_MONGOLAB_URI || 'mongodb://localhost:27017';
-require('mongoose').connect(connectionString, {server: {socketOptions: { keepAlive: 1 } } });
+configure(app, io, events);
+route(app, io, events);
+socket(app, io, events);
 
-configure(app);
-route(app);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+server.listen(app.get('port'), function(){
+	console.log("Node blog started on port " + app.get('port'));
 });

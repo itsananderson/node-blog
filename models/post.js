@@ -7,6 +7,8 @@ var mongoose = require('mongoose'),
 	postDate: {type: Date, default: Date.now},
 	postUpdated: {type: Date, default: Date.now},
 	postCategory: String,
+	postContent: String,
+	postPreview: String,
 	postDraft: String
  });
 

@@ -1,5 +1,5 @@
 var app = angular.module('app', [])
-	
+
 	.filter('markdown', function() {
 		return function(text) {
 			if (typeof text == "undefined") {
@@ -9,16 +9,30 @@ var app = angular.module('app', [])
 		}
 	})
 
-	.factory('PostFactory', function($http) {
+	.factory('io', function() {
+		return window.io.connect();
+	})
+
+	.factory('PostFactory', function($http, io) {
 		return {
 			getContent: function(id) {
 				return $http.get('/api/post/' + id);
 			},
-			subscribeToChange: function (id) {
-				return $http.get('/api/posts/' + id + '/subscribe');
+			subscribeToPreviews: function (id, cb) {
+				io.emit('post:subscribeToPreviews', id);
+				io.on('post:previewUpdated:' + id, cb);
 			},
-			savePost: function(slug, post){
-				return $http.post('/api/posts/' + slug, {post:post});
+			savePreview: function(slug, post, cb) {
+				io.emit('post:savePreview', post);
+				io.on('post:previewUpdated:' + post._id, cb);
+			},
+			saveDraft: function(slug, post, cb) {
+				io.emit('post:saveDraft', post);
+				io.on('post:draftUpdated:' + post._id, cb);
+			},
+			savePost: function(slug, post, cb){
+				io.emit('post:savePost', post);
+				io.on('post:updated:' + post._id, cb);
 			},
 			createPost: function(post) {
 				return $http.post('/api/posts', {post:post});
@@ -29,26 +43,18 @@ var app = angular.module('app', [])
 	.controller('PostCtrl', function($scope, PostFactory){
 		$scope.post = Post;
 
-		var getUpdate = function(cb) {
-			PostFactory.subscribeToChange(Post._id).success(function(res) {
-				if ( res.post ) {
-					$scope.post = res.post;
-				}
-				setTimeout(cb.bind(undefined, arguments), 100);
-			}).error(function(){
-				setTimeout(cb.bind(undefined, arguments), 1000);
+		PostFactory.subscribeToPreviews(Post._id, function(post){
+			$scope.$apply(function(){
+				$scope.post = post;
 			});
-		};
-
-		var updateLoop = function updateLoop() {
-			getUpdate(updateLoop);
-		};
-
-		updateLoop();
+		});
 	})
 
 	.controller('PostEditCtrl', function($scope, PostFactory){
 		var slug = Post.postSlug;
+		if ( !Post.postPreview ) {
+			Post.postPreview = Post.postDraft;
+		}
 		$scope.post = Post;
 
 		$scope.postDirty = false;
@@ -56,22 +62,44 @@ var app = angular.module('app', [])
 
 		var queueSave = function(newVal, oldVal) {
 			if ( newVal !== oldVal ) {
-				$scope.postDirty = true;
+				$scope.previewDirty = true;
+				$scope.draftDirty = true;
 			}
 		};
 
 		$scope.$watch('post.postName', queueSave);
-		$scope.$watch('post.postDraft', queueSave);
+		$scope.$watch('post.postPreview', queueSave);
 
 		setInterval(function(){
-			if ( $scope.postDirty && !$scope.draftSaving ) {
-				$scope.draftSaving = true;
-				PostFactory.savePost(slug, $scope.post).success(function() {
-					$scope.draftSaving = false;
+			if ( $scope.previewDirty && !$scope.previewSaving ) {
+				console.log('previewing');
+				$scope.previewSaving = true;
+				PostFactory.savePreview(slug, $scope.post, function() {
+					$scope.$apply(function() {
+						$scope.previewSaving = false;
+					});
 				});
-				$scope.postDirty = false;
+				$scope.$apply(function() {
+					$scope.previewDirty = false;
+				});
 			}
 		}, 100);
+
+		setInterval(function(){
+			if ( $scope.draftDirty && !$scope.draftSaving ) {
+				console.log('drafting');
+				$scope.draftSaving = true;
+				$scope.post.postDraft = $scope.post.postPreview;
+				PostFactory.saveDraft(slug, $scope.post, function() {
+					$scope.$apply(function() {
+						$scope.draftSaving = false;
+					});
+				});
+				$scope.$apply(function() {
+					$scope.draftDirty = false;
+				});
+			}
+		}, 1000);
 	})
 
 	.controller('PostNewCtrl', function($scope, PostFactory) {
@@ -97,15 +125,11 @@ var app = angular.module('app', [])
 			var newSlug = slugFilter(newVal);
 			var oldSlug = slugFilter(oldVal);
 			if ($scope.post.postSlug == oldSlug || $scope.post.postSlug == '') {
-				console.log('same');
 				$scope.post.postSlug = newSlug;
-			} else {
-				console.log('diff');
 			}
 		});
 
 		$scope.changeSlug = function() {
-			console.log('here');
 			if ( $scope.post.postSlug == '' ) {
 				$scope.post.postSlug = slugFilter($scope.post.postName);
 			}

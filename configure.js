@@ -1,4 +1,7 @@
-module.exports = function(app) {
+module.exports = function(app, io, events) {
+
+	var connectionString = process.env.CUSTOMCONNSTR_MONGOLAB_URI || 'mongodb://localhost:27017';
+	require('mongoose').connect(connectionString, {server: {socketOptions: { keepAlive: 1 } } });
 
 	var express = require('express'),
 		path = require('path'),
@@ -15,6 +18,7 @@ module.exports = function(app) {
 				{href:'/css/style.css'}
 			];
 			options.scripts = [
+				{src: '/socket.io/socket.io.js'},
 				{src: '/lib/js/angular.min.js'},
 				{src: '/lib/js/jquery.min.js'},
 				{src: '/lib/js/bootstrap.min.js'},
